@@ -46,3 +46,33 @@ resource "aws_launch_template" "this" {
 
   update_default_version = true
 }
+
+resource "aws_autoscaling_group" "this" {
+  name = "${local.env}-asg"
+
+  desired_capacity    = 2
+  max_size            = 4
+  min_size            = 1
+  vpc_zone_identifier = [for subnet in aws_subnet.public : subnet.id]
+
+  launch_template {
+    id      = aws_launch_template.this.id
+    version = aws_launch_template.this.latest_version
+  }
+
+  instance_refresh {
+    strategy = "Rolling"
+
+    preferences {
+      min_healthy_percentage = 50
+    }
+
+    triggers = ["launch_template"]
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "${local.env}-asg"
+    propagate_at_launch = true
+  }
+}
