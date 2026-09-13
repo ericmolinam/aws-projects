@@ -38,7 +38,7 @@ resource "aws_launch_template" "this" {
   name_prefix   = "${local.env}-asg-"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
-  user_data     = filebase64("${path.module}/user-data.sh")
+  user_data     = filebase64("${path.module}/script.sh")
 
   vpc_security_group_ids = [
     aws_security_group.public.id,
