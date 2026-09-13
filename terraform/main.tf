@@ -51,12 +51,9 @@ resource "aws_autoscaling_group" "this" {
 
   instance_refresh {
     strategy = "Rolling"
-
     preferences {
       min_healthy_percentage = 50
     }
-
-    triggers = ["launch_template"]
   }
 
   tag {
@@ -114,6 +111,7 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_autoscaling_attachment" "this" {
+  # Attach the target group to the AWS Auto Scaling Group
   lb_target_group_arn    = aws_lb_target_group.this.arn
   autoscaling_group_name = aws_autoscaling_group.this.name
 }
