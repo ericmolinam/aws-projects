@@ -9,27 +9,40 @@ resource "aws_vpc" "this" {
   }
 }
 
-resource "aws_instance" "this" {
-  for_each = local.public_subnets
+# resource "aws_instance" "this" {
+#   for_each = local.public_subnets
 
-  ami           = data.aws_ami.amazon_linux.id
+#   ami           = data.aws_ami.amazon_linux.id
+#   instance_type = "t3.micro"
+
+#   vpc_security_group_ids = [aws_security_group.public.id]
+#   subnet_id              = aws_subnet.public[each.key].id
+
+#   user_data = <<-EOF
+#               #!/bin/bash
+#               sudo yum update -y && sudo yum install -y httpd
+#               sudo systemctl start httpd
+#               sudo systemctl enable httpd
+#               EOF
+
+#   tags = {
+#     Name = "${local.env}-ec2-${each.key}"
+#   }
+# }
+
+# output "ec2_ip" {
+#   value = { for k, v in aws_instance.this : k => v.public_ip }
+# }
+
+resource "aws_launch_template" "this" {
+  name_prefix   = "${local.env}-asg-"
+  image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
+  user_data     = filebase64("${path.module}/user-data.sh")
 
-  vpc_security_group_ids = [aws_security_group.public.id]
-  subnet_id              = aws_subnet.public[each.key].id
+  vpc_security_group_ids = [
+    aws_security_group.public.id,
+  ]
 
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo yum update -y && sudo yum install -y httpd
-              sudo systemctl start httpd
-              sudo systemctl enable httpd
-              EOF
-
-  tags = {
-    Name = "${local.env}-ec2-${each.key}"
-  }
-}
-
-output "ec2_ip" {
-  value = { for k, v in aws_instance.this : k => v.public_ip }
+  update_default_version = true
 }
