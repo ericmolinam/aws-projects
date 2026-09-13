@@ -1,1 +1,1 @@
-the-old-org a fun project made in order to familiarise myself with AWS, EKS, Cloudflare and other technologies. Trying to do everything with Terraform and declarative as possible.
+the-old-company a fun project made in order to familiarise myself with AWS, EKS, Cloudflare and other technologies. Trying to do everything with Terraform and declarative as possible.
