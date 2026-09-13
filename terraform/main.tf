@@ -35,7 +35,7 @@ resource "aws_vpc" "this" {
 # }
 
 resource "aws_launch_template" "this" {
-  name_prefix   = "${local.env}-asg-"
+  name_prefix   = "${local.env}-ec2-template-"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
   user_data     = filebase64("${path.module}/script.sh")
@@ -72,7 +72,7 @@ resource "aws_autoscaling_group" "this" {
 
   tag {
     key                 = "Name"
-    value               = "${local.env}-asg"
+    value               = "${local.env}-web-server"
     propagate_at_launch = true
   }
 }
