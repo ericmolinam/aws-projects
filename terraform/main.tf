@@ -9,6 +9,20 @@ resource "aws_vpc" "this" {
   }
 }
 
+# ======================================================
+# EC2 Launch Template & Auto Scaling Group configuration
+# ======================================================
+
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["137112412989"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023.*-x86_64"]
+  }
+}
+
 resource "aws_launch_template" "this" {
   name_prefix   = "${local.env}-ec2-template-"
   image_id      = data.aws_ami.amazon_linux.id
@@ -51,7 +65,9 @@ resource "aws_autoscaling_group" "this" {
     propagate_at_launch = true
   }
 }
-
+# ==========================================
+# Load Balancer & Target Group Configuration
+# ==========================================
 resource "aws_lb" "this" {
   name               = "${local.env}-lb"
   internal           = false
