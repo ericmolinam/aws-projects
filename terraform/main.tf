@@ -62,6 +62,7 @@ resource "aws_autoscaling_group" "this" {
     propagate_at_launch = true
   }
 }
+
 # ==========================================
 # Load Balancer & Target Group Configuration
 # ==========================================
