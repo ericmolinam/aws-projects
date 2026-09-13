@@ -76,3 +76,53 @@ resource "aws_autoscaling_group" "this" {
     propagate_at_launch = true
   }
 }
+
+resource "aws_lb" "this" {
+  name               = "${local.env}-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.public.id]
+  subnets            = [for subnet in aws_subnet.public : subnet.id]
+
+  tags = {
+    Name = "${local.env}-lb"
+  }
+}
+
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.this.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this.arn
+  }
+}
+
+resource "aws_lb_target_group" "this" {
+  name     = "${local.env}-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.this.id
+
+  health_check {
+    enabled             = true
+    healthy_threshold   = 2
+    interval            = 30
+    matcher             = "200"
+    path                = "/"
+    protocol            = "HTTP"
+    timeout             = 5
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name = "${local.env}-tg"
+  }
+}
+
+resource "aws_autoscaling_attachment" "this" {
+  autoscaling_group_name = aws_autoscaling_group.this.name
+  lb_target_group_arn    = aws_lb_target_group.this.arn
+}
