@@ -24,4 +24,6 @@ locals {
     }
   }
 
+  fqdn = "old-company.org"
+
 }

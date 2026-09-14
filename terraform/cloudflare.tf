@@ -1,12 +1,12 @@
 data "cloudflare_zone" "this" {
   filter = {
-    name = "old-company.org"
+    name = local.fqdn
   }
 }
 
 resource "cloudflare_dns_record" "application" {
   zone_id = data.cloudflare_zone.this.id
-  name    = "web.old-company.org"
+  name    = "web.${local.fqdn}"
   type    = "CNAME"
   content = aws_lb.this.dns_name
   proxied = false
@@ -14,7 +14,7 @@ resource "cloudflare_dns_record" "application" {
 }
 
 resource "aws_acm_certificate" "this" {
-  domain_name       = "web.old-company.org"
+  domain_name       = "web.${local.fqdn}"
   validation_method = "DNS"
 
   lifecycle {
