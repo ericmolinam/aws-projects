@@ -4,7 +4,7 @@ data "cloudflare_zone" "this" {
   }
 }
 
-resource "cloudflare_dns_record" "application" {
+resource "cloudflare_dns_record" "web" {
   zone_id = data.cloudflare_zone.this.id
   name    = "web.${local.fqdn}"
   type    = "CNAME"
