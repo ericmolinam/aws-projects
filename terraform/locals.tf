@@ -1,7 +1,9 @@
 locals {
+  fqdn     = "old-company.org"
   region   = "eu-west-1"
   vpc_cidr = "10.0.0.0/16"
   env      = "dev"
+
   public_subnets = {
     public_1 = {
       cidr_block        = cidrsubnet(local.vpc_cidr, 8, 1)
@@ -23,7 +25,4 @@ locals {
       availability_zone = "${local.region}b"
     }
   }
-
-  fqdn = "old-company.org"
-
 }
