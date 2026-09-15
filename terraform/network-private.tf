@@ -1,5 +1,5 @@
 resource "aws_eip" "this" {
-  for_each = local.public_subnets
+  for_each = local.private ? local.public_subnets : {}
 
   domain = "vpc"
 
@@ -11,7 +11,7 @@ resource "aws_eip" "this" {
 resource "aws_nat_gateway" "this" {
   depends_on = [aws_internet_gateway.this]
 
-  for_each = local.public_subnets
+  for_each = local.private ? local.public_subnets : {}
 
   allocation_id = aws_eip.this[each.key].id
   subnet_id     = aws_subnet.public[each.key].id
@@ -22,7 +22,7 @@ resource "aws_nat_gateway" "this" {
 }
 
 resource "aws_subnet" "private" {
-  for_each = local.private_subnets
+  for_each = local.private ? local.private_subnets : {}
 
   vpc_id            = aws_vpc.this.id
   cidr_block        = each.value.cidr_block
@@ -34,7 +34,7 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_route_table" "private" {
-  for_each = local.private_subnets
+  for_each = local.private ? local.private_subnets : {}
 
   vpc_id = aws_vpc.this.id
 
@@ -54,7 +54,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
-  for_each = local.private_subnets
+  for_each = local.private ? local.private_subnets : {}
 
   subnet_id      = aws_subnet.private[each.key].id
   route_table_id = aws_route_table.private[each.key].id

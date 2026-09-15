@@ -3,6 +3,7 @@ locals {
   region   = "eu-west-1"
   vpc_cidr = "10.0.0.0/16"
   env      = "dev"
+  private  = false
 
   public_subnets = {
     public_1 = {
@@ -16,7 +17,7 @@ locals {
     public_3 = {
       cidr_block        = cidrsubnet(local.vpc_cidr, 8, 3)
       availability_zone = "${local.region}c"
-    }    
+    }
   }
 
   private_subnets = {
