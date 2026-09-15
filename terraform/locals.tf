@@ -1,9 +1,9 @@
 locals {
-  fqdn     = "old-company.org"
+  fqdn = "old-company.org"
+  env  = "dev"
+
   region   = "eu-west-1"
   vpc_cidr = "10.0.0.0/16"
-  env      = "dev"
-  private  = false
 
   public_subnets = {
     public_1 = {
@@ -19,6 +19,8 @@ locals {
       availability_zone = "${local.region}c"
     }
   }
+
+  private = false
 
   private_subnets = {
     private_1 = {
