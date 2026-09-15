@@ -13,6 +13,10 @@ locals {
       cidr_block        = cidrsubnet(local.vpc_cidr, 8, 2)
       availability_zone = "${local.region}b"
     }
+    public_3 = {
+      cidr_block        = cidrsubnet(local.vpc_cidr, 8, 3)
+      availability_zone = "${local.region}c"
+    }    
   }
 
   private_subnets = {
@@ -23,6 +27,10 @@ locals {
     private_2 = {
       cidr_block        = cidrsubnet(local.vpc_cidr, 8, 102)
       availability_zone = "${local.region}b"
+    }
+    private_3 = {
+      cidr_block        = cidrsubnet(local.vpc_cidr, 8, 103)
+      availability_zone = "${local.region}c"
     }
   }
 }
