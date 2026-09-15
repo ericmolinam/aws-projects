@@ -10,7 +10,7 @@ cat <<EOF | sudo tee /var/www/html/index.html
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Old Company &bull; Digital Craft &amp; Systems</title>
+  <title>old-company.org</title>
   <style>
     * {
       box-sizing: border-box;
@@ -231,7 +231,7 @@ cat <<EOF | sudo tee /var/www/html/index.html
   </main>
 
   <footer id="contact">
-    <p>&copy; 2026 The Old Company. &bull; old-company.org</p>
+    <p>&copy; 2026 &bull; old-company.org</p>
   </footer>
 </body>
 </html>
