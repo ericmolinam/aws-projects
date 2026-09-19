@@ -3,7 +3,7 @@ locals {
   env  = "dev"
 
   region   = "eu-west-1"
-  vpc_cidr = "10.0.0.0/16"
+  vpc_cidr = "10.10.0.0/16"
 
   public_subnets = {
     public_1 = {
