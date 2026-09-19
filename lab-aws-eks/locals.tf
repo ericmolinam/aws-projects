@@ -18,7 +18,7 @@ locals {
     }
   }
 
-  private = false
+  private = true
 
   private_subnets = {
     private_1 = {
