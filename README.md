@@ -1,1 +1,1 @@
-the-old-company a fun project made in order to familiarise myself with AWS, EKS, Cloudflare and other technologies. Trying to do everything with Terraform and declarative as possible.
+this repository contains a collection of projects built to get familiar with AWS, EKS, Cloudflare, and other technologies, aiming to manage everything declaratively with Terraform.
