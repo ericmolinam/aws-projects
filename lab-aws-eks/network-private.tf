@@ -4,7 +4,7 @@ resource "aws_eip" "this" {
   domain = "vpc"
 
   tags = {
-    Name = "${local.env}-ip-${each.value.availability_zone}"
+    Name = "${local.env}-ip-eks-${each.value.availability_zone}"
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_nat_gateway" "this" {
   subnet_id     = aws_subnet.public[each.key].id
 
   tags = {
-    Name = "${local.env}-nat-${each.value.availability_zone}"
+    Name = "${local.env}-nat-eks-${each.value.availability_zone}"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_subnet" "private" {
   availability_zone = each.value.availability_zone
 
   tags = {
-    Name = "${local.env}-private-${each.value.availability_zone}"
+    Name = "${local.env}-private-eks-${each.value.availability_zone}"
   }
 }
 
@@ -49,7 +49,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${local.env}-private-${each.value.availability_zone}"
+    Name = "${local.env}-private-eks-${each.value.availability_zone}"
   }
 }
 

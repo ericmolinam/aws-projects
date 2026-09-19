@@ -2,7 +2,7 @@ resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "${local.env}-igw"
+    Name = "${local.env}-eks-igw"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${local.env}-public-${each.value.availability_zone}"
+    Name = "${local.env}-public-eks-${each.value.availability_zone}"
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "${local.env}-public"
+    Name = "${local.env}-public-eks"
   }
 }
 
@@ -40,11 +40,11 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_security_group" "public" {
-  name   = "${local.env}-public"
+  name   = "${local.env}-public-eks"
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "${local.env}-public"
+    Name = "${local.env}-public-eks"
   }
 }
 
