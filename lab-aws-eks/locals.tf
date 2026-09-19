@@ -1,5 +1,7 @@
 locals {
   env  = "dev"
+  eks_name = "${local.env}-eks"
+  eks_version = "1.36"
 
   region   = "eu-west-1"
   vpc_cidr = "10.20.0.0/16"
