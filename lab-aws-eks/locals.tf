@@ -1,6 +1,6 @@
 locals {
-  env  = "dev"
-  eks_name = "${local.env}-eks"
+  env         = "dev"
+  eks_name    = "${local.env}-eks"
   eks_version = "1.36"
 
   region   = "eu-west-1"
