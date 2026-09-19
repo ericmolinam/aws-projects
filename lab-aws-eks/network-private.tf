@@ -1,25 +1,25 @@
-# resource "aws_eip" "this" {
-#   for_each = local.private ? local.public_subnets : {}
+resource "aws_eip" "this" {
+  for_each = local.private ? local.public_subnets : {}
 
-#   domain = "vpc"
+  domain = "vpc"
 
-#   tags = {
-#     Name = "${local.env}-ip-eks-${each.value.availability_zone}"
-#   }
-# }
+  tags = {
+    Name = "${local.env}-ip-eks-${each.value.availability_zone}"
+  }
+}
 
-# resource "aws_nat_gateway" "this" {
-#   depends_on = [aws_internet_gateway.this]
+resource "aws_nat_gateway" "this" {
+  depends_on = [aws_internet_gateway.this]
 
-#   for_each = local.private ? local.public_subnets : {}
+  for_each = local.private ? local.public_subnets : {}
 
-#   allocation_id = aws_eip.this[each.key].id
-#   subnet_id     = aws_subnet.public[each.key].id
+  allocation_id = aws_eip.this[each.key].id
+  subnet_id     = aws_subnet.public[each.key].id
 
-#   tags = {
-#     Name = "${local.env}-nat-eks-${each.value.availability_zone}"
-#   }
-# }
+  tags = {
+    Name = "${local.env}-nat-eks-${each.value.availability_zone}"
+  }
+}
 
 resource "aws_subnet" "private" {
   for_each = local.private ? local.private_subnets : {}
