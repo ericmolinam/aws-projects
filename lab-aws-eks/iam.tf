@@ -1,4 +1,4 @@
-# IAM role and policy attachment for EKS cluster
+# EKS Cluster
 resource "aws_iam_role" "eks" {
   name = "${local.env}-${local.eks_name}-eks-cluster"
 
@@ -23,7 +23,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
   role       = aws_iam_role.eks.name
 }
 
-# IAM role and policy attachment for EKS node groups
+# EKS Node Groups
 resource "aws_iam_role" "nodes" {
   name = "${local.env}-${local.eks_name}-eks-nodes"
 
