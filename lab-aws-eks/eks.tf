@@ -15,7 +15,7 @@ resource "aws_eks_cluster" "eks" {
 
   access_config {
     authentication_mode                         = "API"
-    bootstrap_cluster_creator_admin_permissions = true
+    bootstrap_cluster_creator_admin_permissions = false
   }
 
   depends_on = [aws_iam_role_policy_attachment.AmazonEKSClusterPolicy]
