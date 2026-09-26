@@ -77,7 +77,7 @@ Identity management is decoupled from individual AWS accounts:
 
 ---
 
-When a user executes AWS CLI or `kubectl` commands, authentication traverses three stages: federated identity, STS role assumption, and EKS access validation.
+When a user executes AWS CLI or `kubectl` commands, authentication traverses three stages: **federated identity**, **STS role assumption**, and **EKS access validation**.
 
 ```mermaid
 sequenceDiagram
