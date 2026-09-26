@@ -2,13 +2,14 @@ The purpose of this document is to describe how my personal AWS Organization and
 
 ## Architecture
 
-The setup separates centralized identity management from workload infrastructure across distinct AWS accounts within an AWS Organization.
+The following diagram shows the overall flow of how identity and access to the EKS cluster are managed.
+
 
 ```mermaid
 flowchart TD
-    subgraph Management_Account["Management Account"]
+    subgraph Management_Account["emolinam5-root account (206226812073)"]
         Users["Users (admin1, dev1, dev2, ...)"]
-        Groups["Identity Center Groups (admin, developer)"]
+        Groups["Identity Center: Groups (admin, developer)"]
         PermSets["Permission Sets:
         - AdministratorAccess
         - PowerUserAccess"]
@@ -55,12 +56,9 @@ flowchart TD
     ControlPlane --- NodeGroup
 ```
 
----
 
-Identity management is decoupled from individual AWS accounts:
-
-1. **Identity Directory**:
-   - Users (`admin1`, `dev1`, `dev2`) are defined centrally. Passwords and MFA enforcement reside only here.
+1. **Users & Groups**:
+   - Users (`admin1`, `dev1`, `dev2`) are defined centrally through Identity Center.
    - Users are grouped into functional teams (e.g., `admin`, `developer`).
 
 2. **Permission Sets**:
@@ -68,12 +66,9 @@ Identity management is decoupled from individual AWS accounts:
    - `PowerUserAccess`: Full AWS services access excluding direct IAM/Organization user and group management.
 
 3. **Account Assignments**:
-   - Groups are assigned to the target AWS account **`aws-platform-dev`** with their respective Permission Sets.
-   - AWS Identity Center automatically provisions corresponding IAM Roles inside the AWS account with the path prefix `/aws-reserved/sso.amazonaws.com/` and the naming pattern:
-     ```text
-     AWSReservedSSO_<PermissionSetName>_<generated-hash>
-     ```
-   - Identity Center creates **one IAM Role per PermissionSet per target account**, not one role per user. Every member of the `developer` group assumes the same underlying `AWSReservedSSO_PowerUserAccess_*` IAM role in the Dev account.
+   - Groups are assigned to the different AWS accounts (e.g., **`aws-platform-dev`**) with their respective Permission Sets.
+   - AWS Identity Center automatically provisions the IAM roles inside the AWS account.
+      - Note: Identity Center creates **one IAM role per Permission Set per target account**, not one role per user. Every member of the `developer` group assumes the same underlying IAM role in the AWS account.
 
 ---
 
@@ -105,11 +100,10 @@ sequenceDiagram
     EKS->>EKS: Matches ARN against aws_eks_access_entry
     EKS-->>K8s: HTTP 200 (Authorized via Access Policy Association)
 ```
-
-Although users of the same permission set share the underlying IAM Role ARN, their specific username appears in the STS session name:
+**Note**:  Users with the same Permission Set share the underlying IAM Role ARN, but their specific username appears in the STS session name:
 ```text
 arn:aws:sts::<DEV_ACCOUNT_ID>:assumed-role/AWSReservedSSO_PowerUserAccess_<hash>/<username>
 ```
-AWS CloudTrail and EKS audit logs record `<username>` on every API call, preserving individual auditability.
+This way, tools like AWS CloudTrail and EKS audit logs record `<username>` on every API call, preserving individual auditability.
 
 
