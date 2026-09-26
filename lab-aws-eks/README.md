@@ -68,7 +68,7 @@ flowchart TD
 3. **Account Assignments**:
    - Groups are assigned to the different AWS accounts (e.g., **`aws-platform-dev`**) with their respective Permission Sets.
    - AWS Identity Center automatically provisions the IAM roles inside the AWS account.
-      - Note: Identity Center creates **one IAM role per Permission Set per target account**, not one role per user. Every member of the `developer` group assumes the same underlying IAM role in the AWS account.
+      - **Note**: Identity Center creates **one IAM role per Permission Set per target account**, not one role per user. Every member of the `developer` group assumes the same underlying IAM role in the AWS account.
 
 ---
 
