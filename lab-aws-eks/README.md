@@ -7,7 +7,7 @@ The following diagram shows the overall flow of how identity and access to the E
 
 ```mermaid
 flowchart TD
-    subgraph Management_Account["emolinam5-root account (206226812073)"]
+    subgraph Management_Account["emolinam5-root account"]
         Users["Users (admin1, dev1, dev2, ...)"]
         Groups["Identity Center: Groups (admin, developer)"]
         PermSets["Permission Sets:
@@ -23,7 +23,7 @@ flowchart TD
         AssignDev["Assignment: developer + PowerUserAccess -> dev AWS Account"]
     end
 
-    subgraph Dev_Account["aws-platform-dev account (385470934621)"]
+    subgraph Dev_Account["aws-platform-dev account"]
         RoleAdmin["IAM Role (auto-provisioned):
         AWSReservedSSO_AdministratorAccess_*"]
         RoleDev["IAM Role (auto-provisioned):
@@ -80,7 +80,7 @@ sequenceDiagram
     actor User as Developer / Admin
     participant CLI as AWS CLI (SSO Plugin)
     participant SSO as IAM Identity Center (Portal)
-    participant STS as AWS STS (385470934621)
+    participant STS as AWS STS (DEV_ACCOUNT_ID)
     participant K8s as kubectl
     participant EKS as EKS Control Plane (dev-eks)
 
