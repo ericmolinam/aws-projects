@@ -8,7 +8,7 @@ The setup separates centralized identity management from workload infrastructure
 flowchart TD
     subgraph Management_Account["Management Account (Identity Provider)"]
         Users["Users (admin1, dev1, dev2, ...)"]
-        Groups["Identity Center Groups (Admins, Devs)"]
+        Groups["Identity Center Groups (admin, developer)"]
         PermSets["Permission Sets:
         - AdministratorAccess
         - PowerUserAccess"]
@@ -18,11 +18,11 @@ flowchart TD
     end
 
     subgraph AWS_Organizations["AWS Organizations Assignments"]
-        AssignAdmin["Assignment: Admins + AdministratorAccess -> Dev Account"]
-        AssignDev["Assignment: Devs + PowerUserAccess -> Dev Account"]
+        AssignAdmin["Assignment: admin + AdministratorAccess -> dev AWS Account"]
+        AssignDev["Assignment: developer + PowerUserAccess -> dev AWS Account"]
     end
 
-    subgraph Dev_Account["Dev Workload Account (385470934621)"]
+    subgraph Dev_Account["dev AWS Account (385470934621)"]
         RoleAdmin["IAM Role (auto-provisioned):
         AWSReservedSSO_AdministratorAccess_*"]
         RoleDev["IAM Role (auto-provisioned):
