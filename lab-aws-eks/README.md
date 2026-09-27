@@ -106,4 +106,34 @@ arn:aws:sts::<DEV_ACCOUNT_ID>:assumed-role/AWSReservedSSO_PowerUserAccess_<hash>
 ```
 This way, tools like AWS CloudTrail and EKS audit logs record `<username>` on every API call, preserving individual auditability.
 
+---
+Once the cluster is up and running, traffic routing and public DNS records are fully automated and declarative.
 
+```mermaid
+flowchart LR
+    User([User Request]) --> Cloudflare[Cloudflare DNS]
+    Cloudflare --> ALB[AWS Application Load Balancer]
+    
+    subgraph EKS["EKS Cluster"]
+        ING[Ingress: it-tools]
+        LBC[AWS Load Balancer Controller]
+        EDNS[ExternalDNS]
+        POD[Pods: it-tools]
+    end
+
+    ACM[(ACM Certificate)] -.->|TLS match| ALB
+    ING -->|triggers provisioning| LBC
+    LBC -->|provisions & manages| ALB
+    ALB -->|direct IP routing| POD
+    ING -->|watches host & status| EDNS
+    EDNS -->|syncs CNAME| Cloudflare
+```
+
+1. **AWS Load Balancer Controller**:
+   - Authenticates using **EKS Pod Identity**.
+   - The AWS LBC watches for Kubernetes `Ingress` resources and automatically creates/configures an internet-facing AWS Application Load Balancer.
+   - Automatically discovers matching TLS certificates in **AWS Certificate Manager (ACM)** for configured hostnames.
+
+2. **ExternalDNS**:
+   - Watches the cluster's `Ingress` resources.
+   - Automatically provisions, updates, and deletes `CNAME` records in **Cloudflare** pointing to the ALB address, ensuring DNS stays in sync with the application lifecycle.
