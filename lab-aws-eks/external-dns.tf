@@ -28,6 +28,7 @@ resource "helm_release" "external_dns" {
   ]
 
   depends_on = [
-    aws_eks_node_group.general
+    aws_eks_node_group.general,
+    aws_eks_access_policy_association.sso_admin
   ]
 }
