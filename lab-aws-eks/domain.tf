@@ -5,7 +5,7 @@ data "cloudflare_zone" "this" {
 }
 
 resource "aws_acm_certificate" "this" {
-  domain_name       = "app.${local.domain}"
+  domain_name       = "*.${local.domain}"
   validation_method = "DNS"
 
   lifecycle {
