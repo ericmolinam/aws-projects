@@ -1,4 +1,6 @@
 locals {
+  domain = "ericmolinam.com"
+
   env = "dev"
 
   eks_name    = "${local.env}-eks"
