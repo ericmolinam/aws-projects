@@ -4,17 +4,9 @@ data "cloudflare_zone" "this" {
   }
 }
 
-resource "cloudflare_dns_record" "web" {
-  zone_id = data.cloudflare_zone.this.id
-  name    = "eks.${local.domain}"
-  type    = "CNAME"
-  content = "example.com"
-  proxied = true
-  ttl     = 1
-}
 
 resource "aws_acm_certificate" "this" {
-  domain_name       = "eks.${local.domain}"
+  domain_name       = "app.${local.domain}"
   validation_method = "DNS"
 
   lifecycle {
