@@ -21,6 +21,11 @@ resource "aws_eks_cluster" "eks" {
   depends_on = [aws_iam_role_policy_attachment.AmazonEKSClusterPolicy]
 }
 
+resource "aws_eks_addon" "pod_identity" {
+  cluster_name = aws_eks_cluster.eks.name
+  addon_name   = "eks-pod-identity-agent"
+}
+
 # EKS Node groups
 resource "aws_eks_node_group" "general" {
   node_role_arn = aws_iam_role.nodes.arn
